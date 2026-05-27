@@ -54,7 +54,7 @@ const emptyProductForm: ProductFormState = {
   category: "Remeras",
   price: 28000,
   compareAtPrice: "",
-  imageUrl: "vs-gradient://nuevo-producto",
+  imageUrl: "/images/vertice/14-banner-coleccion-basicos.png",
   tags: "unisex, premium",
   isFeatured: false,
   isNew: true,

@@ -26,7 +26,15 @@ type ProductVisualProps = {
 
 export const ProductVisual = ({ product, className = "", priority = "card" }: ProductVisualProps) => {
   if (product.imageUrl && !product.imageUrl.startsWith("vs-gradient://")) {
-    return <img className={`product-image ${className}`} src={product.imageUrl} alt={product.name} loading="lazy" />;
+    return (
+      <img
+        className={`product-image product-image--${priority} ${className}`}
+        src={product.imageUrl}
+        alt={product.name}
+        loading={priority === "hero" ? "eager" : "lazy"}
+        decoding="async"
+      />
+    );
   }
 
   return (

@@ -24,6 +24,7 @@ import {
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { API_URL, publicApi } from "../api";
 import { ProductVisual } from "../components/ProductVisual";
+import { verticeImages } from "../assets";
 import { fallbackProducts } from "../data/fallbackProducts";
 import { useStore } from "../store";
 import type { CartItem, DeliveryMethod, Product } from "../types";
@@ -146,7 +147,12 @@ export const PublicStore = () => {
   }, [category, color, flag, priceMax, products, search, size, sort]);
 
   const dropProducts = products.filter((product) => product.isDrop && product.isActive).slice(0, 4);
-  const heroProduct = products.find((product) => product.isDrop) ?? products[0];
+  const heroVisual = {
+    name: "Editorial nocturna Vértice Studio",
+    category: "Vértice Studio",
+    imageUrl: verticeImages.hero,
+    isDrop: true
+  };
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
 
   return (
@@ -185,7 +191,7 @@ export const PublicStore = () => {
           </div>
 
           <div className="hero__visual" aria-hidden="true">
-            {heroProduct ? <ProductVisual product={heroProduct} priority="hero" /> : <div className="hero-skeleton" />}
+            <ProductVisual product={heroVisual} priority="hero" />
             <div className="hero-card hero-card--top">
               <span>Drop activo</span>
               <strong>{dropProducts.length || 4} piezas</strong>
@@ -210,6 +216,14 @@ export const PublicStore = () => {
             <span className="section-kicker">Catálogo editable</span>
             <h2>Colección inicial lista para vender</h2>
             <p>Filtros por categoría, talle, color, precio y estado comercial del producto.</p>
+          </div>
+
+          <div className="collection-banner">
+            <img src={verticeImages.bannerBasicos} alt="Colección de básicos premium Vértice Studio" loading="lazy" decoding="async" />
+            <div>
+              <span>Base permanente</span>
+              <strong>Prendas esenciales, stock editable y fotos listas para vender.</strong>
+            </div>
           </div>
 
           <div className="catalog-layout">
@@ -835,32 +849,46 @@ const DropSection = ({ products, onOpen }: { products: Product[]; onOpen: (produ
         Ver drop <ArrowRight size={18} />
       </a>
     </div>
-    <div className="drop-grid">
-      {products.map((product) => (
-        <button key={product._id} onClick={() => onOpen(product)}>
-          <ProductVisual product={product} priority="wide" />
-          <span>{product.name}</span>
-        </button>
-      ))}
+    <div className="drop-showcase">
+      <figure className="drop-editorial">
+        <img src={verticeImages.dropLimitado} alt="Rack editorial de drop limitado Vértice Studio" loading="lazy" decoding="async" />
+        <figcaption>Rack editorial / pocas unidades</figcaption>
+      </figure>
+      <div className="drop-grid">
+        {products.map((product) => (
+          <button key={product._id} onClick={() => onOpen(product)}>
+            <ProductVisual product={product} priority="wide" />
+            <span>{product.name}</span>
+          </button>
+        ))}
+      </div>
     </div>
   </section>
 );
 
 const HowToBuy = () => (
   <section className="section steps-section" id="como-comprar">
-    <div className="section__heading">
-      <span className="section-kicker">Cómo comprar</span>
-      <h2>Del catálogo a WhatsApp sin fricción</h2>
-    </div>
-    <div className="steps-grid">
-      {["Elegí producto", "Seleccioná talle y color", "Agregalo al carrito", "Enviá tu pedido", "Coordinamos pago y entrega"].map(
-        (step, index) => (
-          <article key={step}>
-            <span>{index + 1}</span>
-            <strong>{step}</strong>
-          </article>
-        )
-      )}
+    <div className="steps-layout">
+      <div>
+        <div className="section__heading">
+          <span className="section-kicker">Cómo comprar</span>
+          <h2>Del catálogo a WhatsApp sin fricción</h2>
+        </div>
+        <div className="steps-grid">
+          {["Elegí producto", "Seleccioná talle y color", "Agregalo al carrito", "Enviá tu pedido", "Coordinamos pago y entrega"].map(
+            (step, index) => (
+              <article key={step}>
+                <span>{index + 1}</span>
+                <strong>{step}</strong>
+              </article>
+            )
+          )}
+        </div>
+      </div>
+      <figure className="section-media section-media--phone">
+        <img src={verticeImages.whatsappFlow} alt="Flujo visual de pedido por WhatsApp con prendas Vértice Studio" loading="lazy" decoding="async" />
+        <figcaption>Pedido guardado + mensaje listo para enviar</figcaption>
+      </figure>
     </div>
   </section>
 );
@@ -884,6 +912,7 @@ const ShowroomSection = () => (
       </p>
     </div>
     <div className="showroom-visual">
+      <img src={verticeImages.showroom} alt="Showroom premium Vértice Studio en Palermo" loading="lazy" decoding="async" />
       <span>Showroom Palermo</span>
       <strong>Probador, retiro y asesoramiento</strong>
     </div>
@@ -897,7 +926,12 @@ const SizeGuide = () => (
       <h2>Medidas claras antes de consultar</h2>
       <p>Tabla base de referencia en centímetros para reducir dudas y cambios innecesarios.</p>
     </div>
-    <SizeTable />
+    <div className="size-layout">
+      <figure className="section-media">
+        <img src={verticeImages.guiaTalles} alt="Guía visual de medidas para prendas Vértice Studio" loading="lazy" decoding="async" />
+      </figure>
+      <SizeTable />
+    </div>
   </section>
 );
 
@@ -936,36 +970,45 @@ const PolicySection = () => (
       <p>
         Cambios dentro de 10 días corridos, prenda sin uso, con etiqueta y sujeto a stock disponible. Condiciones ajustables para cada cliente real.
       </p>
+      <img src={verticeImages.texturaAlgodon} alt="Detalle de textura y costura premium" loading="lazy" decoding="async" />
     </article>
     <article>
       <Truck size={22} />
       <h3>Envíos</h3>
       <p>Retiro en showroom Palermo, moto mensajería CABA y envíos al interior. Costos y tiempos se coordinan por WhatsApp.</p>
+      <img src={verticeImages.packaging} alt="Packaging premium para envíos Vértice Studio" loading="lazy" decoding="async" />
     </article>
   </section>
 );
 
 const Testimonials = () => (
   <section className="section testimonials">
-    <div className="section__heading">
-      <span className="section-kicker">Reseñas</span>
-      <h2>Prueba social para una tienda inicial</h2>
-    </div>
-    <div className="testimonial-grid">
-      {[
-        "Compré por WhatsApp y coordinamos retiro en el showroom.",
-        "La guía de talles me ayudó a elegir bien sin tener que preguntar tanto.",
-        "Muy buena calidad y atención rápida. El carrito hace todo más claro."
-      ].map((quote) => (
-        <article key={quote}>
-          <div>
-            {Array.from({ length: 5 }).map((_, index) => (
-              <Star key={index} size={15} fill="currentColor" />
-            ))}
-          </div>
-          <p>“{quote}”</p>
-        </article>
-      ))}
+    <div className="testimonials-layout">
+      <figure className="section-media">
+        <img src={verticeImages.lifestyle} alt="Comunidad streetwear Vértice Studio en Palermo" loading="lazy" decoding="async" />
+      </figure>
+      <div>
+        <div className="section__heading">
+          <span className="section-kicker">Reseñas</span>
+          <h2>Prueba social para una tienda inicial</h2>
+        </div>
+        <div className="testimonial-grid">
+          {[
+            "Compré por WhatsApp y coordinamos retiro en el showroom.",
+            "La guía de talles me ayudó a elegir bien sin tener que preguntar tanto.",
+            "Muy buena calidad y atención rápida. El carrito hace todo más claro."
+          ].map((quote) => (
+            <article key={quote}>
+              <div>
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <Star key={index} size={15} fill="currentColor" />
+                ))}
+              </div>
+              <p>“{quote}”</p>
+            </article>
+          ))}
+        </div>
+      </div>
     </div>
   </section>
 );
@@ -1004,6 +1047,7 @@ const FinalCta = () => (
       <span className="section-kicker">Stock, pedidos y WhatsApp</span>
       <h2>Armá tu pedido y consultá disponibilidad en segundos.</h2>
     </div>
+    <img src={verticeImages.outfitCompleto} alt="Look completo urbano Vértice Studio" loading="lazy" decoding="async" />
     <div className="hero__actions">
       <a className="btn btn--primary" href="#catalogo">
         Ver catálogo <ArrowRight size={18} />
