@@ -135,7 +135,7 @@ const seed = async () => {
     }
   }
 
-  console.info(`[seed] Admin listo: ${env.ADMIN_EMAIL} / ${env.ADMIN_PASSWORD}`);
+  console.info(`[seed] Admin listo: ${env.ADMIN_EMAIL}`);
   console.info(`[seed] Productos creados/actualizados: ${savedProducts.length}`);
 };
 

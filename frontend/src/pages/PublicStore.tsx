@@ -618,6 +618,12 @@ const CartDrawer = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
       customerAddress,
       notes
     });
+    const whatsappUrl = buildWhatsAppUrl(whatsappMessage);
+    const whatsappWindow = window.open("about:blank", "_blank");
+
+    if (whatsappWindow) {
+      whatsappWindow.opener = null;
+    }
 
     const payload = {
       customerName,
@@ -648,7 +654,11 @@ const CartDrawer = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
       addToast("No se pudo guardar en backend. Abrimos WhatsApp como fallback.", "error");
     } finally {
       setIsSubmitting(false);
-      window.open(buildWhatsAppUrl(whatsappMessage), "_blank", "noopener,noreferrer");
+      if (whatsappWindow) {
+        whatsappWindow.location.href = whatsappUrl;
+      } else {
+        window.location.href = whatsappUrl;
+      }
     }
   };
 

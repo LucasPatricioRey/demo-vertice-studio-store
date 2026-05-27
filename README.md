@@ -91,6 +91,21 @@ npm run check
 
 El seed crea o actualiza el admin usando `ADMIN_EMAIL` y `ADMIN_PASSWORD`.
 
+## Cómo probar un pedido por WhatsApp
+
+1. Entrar al catálogo público.
+2. Abrir un producto y elegir talle/color con stock.
+3. Agregarlo al carrito.
+4. Completar nombre, teléfono, barrio/localidad, dirección si aplica, modalidad y observaciones.
+5. Presionar **Enviar pedido por WhatsApp**.
+
+Resultado esperado:
+
+- El pedido se guarda en MongoDB si el backend está disponible.
+- El pedido aparece en el panel admin, sección Pedidos.
+- Se abre WhatsApp con el resumen del pedido, productos, talle, color, cantidad, subtotal y datos del cliente.
+- Si el backend falla, la UX no se rompe y WhatsApp se abre igual como fallback.
+
 ## Funcionalidades públicas
 
 - Hero editorial de marca streetwear premium

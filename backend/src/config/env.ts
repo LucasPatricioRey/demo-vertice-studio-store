@@ -22,5 +22,8 @@ export const hasDatabaseConfig = Boolean(env.MONGODB_URI);
 
 export const getJwtSecret = () => {
   if (env.JWT_SECRET) return env.JWT_SECRET;
+  if (env.NODE_ENV === "production") {
+    throw new Error("JWT_SECRET es requerido en produccion.");
+  }
   return "dev-demo-jwt-secret-change-me";
 };

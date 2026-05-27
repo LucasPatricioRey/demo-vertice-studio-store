@@ -1208,8 +1208,8 @@ th {
   width: min(380px, 100vw);
 }
 
-.drawer--open {
-  transform: translateX(0);
+.drawer.drawer--open {
+  transform: translateX(0) !important;
 }
 
 .drawer__header,
@@ -1879,6 +1879,16 @@ th {
 
   .wishlist-row strong {
     grid-column: 2;
+  }
+
+  .table-wrap table {
+    min-width: 100%;
+  }
+
+  .table-wrap th,
+  .table-wrap td {
+    padding: 10px 7px;
+    font-size: 0.76rem;
   }
 }
 
