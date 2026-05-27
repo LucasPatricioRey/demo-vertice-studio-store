@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+frontend/.env
+backend/.env
+*.log
+*.err
+logs
+.DS_Store
+coverage
+.vite
