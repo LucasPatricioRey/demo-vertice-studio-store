@@ -214,20 +214,33 @@ export const PublicStore = () => {
             </div>
           </div>
 
-          <div className="hero__visual scene-3d" aria-hidden="true" onMouseMove={handleTiltMove} onMouseLeave={resetTilt}>
-            <ProductVisual product={heroVisual} priority="hero" />
-            <div className="hero-orbit" />
-            <div className="hero-card hero-card--top">
-              <span>Drop activo</span>
-              <strong>{dropProducts.length || 4} piezas</strong>
-            </div>
-            <div className="hero-card hero-card--bottom">
-              <span>Venta asistida</span>
-              <strong>WhatsApp + admin</strong>
-            </div>
-            <div className="hero-card hero-card--side">
-              <span>Stock real</span>
-              <strong>Talle + color</strong>
+          <div className="hero__visual scene-3d hero-impact" aria-hidden="true" onMouseMove={handleTiltMove} onMouseLeave={resetTilt}>
+            <div className="hero-stage">
+              <div className="hero-stage__halo" />
+              <div className="hero-stage__grid" />
+              <ProductVisual product={heroVisual} priority="hero" className="hero-main-image" />
+              <img className="hero-float hero-float--look" src={verticeImages.outfitCompleto} alt="" loading="eager" decoding="async" />
+              <img className="hero-float hero-float--product" src={verticeImages.hoodieCore} alt="" loading="eager" decoding="async" />
+              <img className="hero-float hero-float--accessory" src={verticeImages.accesorios} alt="" loading="eager" decoding="async" />
+              <div className="hero-orbit" />
+              <div className="hero-depth-line hero-depth-line--one" />
+              <div className="hero-depth-line hero-depth-line--two" />
+              <div className="hero-card hero-card--top">
+                <span>Drop activo</span>
+                <strong>{dropProducts.length || 4} piezas</strong>
+              </div>
+              <div className="hero-card hero-card--bottom">
+                <span>Venta asistida</span>
+                <strong>WhatsApp + admin</strong>
+              </div>
+              <div className="hero-card hero-card--side">
+                <span>Stock real</span>
+                <strong>Talle + color</strong>
+              </div>
+              <div className="hero-pulse-card">
+                <span>Pedido guardado</span>
+                <strong>antes de abrir WhatsApp</strong>
+              </div>
             </div>
           </div>
         </section>
@@ -912,6 +925,8 @@ const DropSection = ({ products, onOpen }: { products: Product[]; onOpen: (produ
     <div className="drop-showcase">
       <figure className="drop-editorial">
         <img src={verticeImages.dropLimitado} alt="Rack editorial de drop limitado Vértice Studio" loading="lazy" decoding="async" />
+        <span className="drop-chip drop-chip--units">Stock limitado</span>
+        <span className="drop-chip drop-chip--timer">Drop 72 hs</span>
         <figcaption>Rack editorial / pocas unidades</figcaption>
       </figure>
       <div className="drop-grid">
