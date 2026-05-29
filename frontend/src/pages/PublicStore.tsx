@@ -21,7 +21,7 @@ import {
   Truck,
   X
 } from "lucide-react";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type MouseEvent, type ReactNode } from "react";
 import { API_URL, publicApi } from "../api";
 import { ProductVisual } from "../components/ProductVisual";
 import { verticeImages } from "../assets";
@@ -72,6 +72,30 @@ const deliveryOptions: Array<{ value: DeliveryMethod; label: string; description
     description: "Despacho por correo o transporte según destino."
   }
 ];
+
+const handleTiltMove = (event: MouseEvent<HTMLElement>) => {
+  if (window.matchMedia("(prefers-reduced-motion: reduce), (pointer: coarse)").matches) return;
+
+  const element = event.currentTarget;
+  const rect = element.getBoundingClientRect();
+  const x = (event.clientX - rect.left) / rect.width - 0.5;
+  const y = (event.clientY - rect.top) / rect.height - 0.5;
+
+  element.style.setProperty("--tilt-x", `${(-y * 7).toFixed(2)}deg`);
+  element.style.setProperty("--tilt-y", `${(x * 8).toFixed(2)}deg`);
+  element.style.setProperty("--tilt-z", `${(x * 5).toFixed(2)}deg`);
+  element.style.setProperty("--glow-x", `${((x + 0.5) * 100).toFixed(0)}%`);
+  element.style.setProperty("--glow-y", `${((y + 0.5) * 100).toFixed(0)}%`);
+};
+
+const resetTilt = (event: MouseEvent<HTMLElement>) => {
+  const element = event.currentTarget;
+  element.style.removeProperty("--tilt-x");
+  element.style.removeProperty("--tilt-y");
+  element.style.removeProperty("--tilt-z");
+  element.style.removeProperty("--glow-x");
+  element.style.removeProperty("--glow-y");
+};
 
 export const PublicStore = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -190,8 +214,9 @@ export const PublicStore = () => {
             </div>
           </div>
 
-          <div className="hero__visual" aria-hidden="true">
+          <div className="hero__visual scene-3d" aria-hidden="true" onMouseMove={handleTiltMove} onMouseLeave={resetTilt}>
             <ProductVisual product={heroVisual} priority="hero" />
+            <div className="hero-orbit" />
             <div className="hero-card hero-card--top">
               <span>Drop activo</span>
               <strong>{dropProducts.length || 4} piezas</strong>
@@ -199,6 +224,10 @@ export const PublicStore = () => {
             <div className="hero-card hero-card--bottom">
               <span>Venta asistida</span>
               <strong>WhatsApp + admin</strong>
+            </div>
+            <div className="hero-card hero-card--side">
+              <span>Stock real</span>
+              <strong>Talle + color</strong>
             </div>
           </div>
         </section>
@@ -429,9 +458,14 @@ const ProductCard = ({ product, onOpen }: { product: Product; onOpen: () => void
   const { addToCart, toggleWishlist, isWishlisted } = useStore();
   const firstAvailable = product.variants.find((variant) => variant.stock > 0);
   const stock = getProductStock(product);
+  const availableSizes = unique(product.variants.filter((variant) => variant.stock > 0).map((variant) => variant.size)).slice(0, 4);
+  const availableColors = product.variants
+    .filter((variant) => variant.stock > 0)
+    .filter((variant, index, list) => list.findIndex((item) => item.color === variant.color) === index)
+    .slice(0, 4);
 
   return (
-    <article className="product-card">
+    <article className="product-card tilt-card" onMouseMove={handleTiltMove} onMouseLeave={resetTilt}>
       <button className="product-card__media" onClick={onOpen}>
         <ProductVisual product={product} />
         <div className="badge-stack">
@@ -451,6 +485,19 @@ const ProductCard = ({ product, onOpen }: { product: Product; onOpen: () => void
         </button>
       </div>
       <p>{product.shortDescription}</p>
+      <div className="product-card__meta" aria-label="Disponibilidad">
+        <span>{stock ? `${stock} u. disponibles` : "Sin stock"}</span>
+        <div className="mini-sizes">
+          {availableSizes.map((item) => (
+            <i key={item}>{item}</i>
+          ))}
+        </div>
+        <div className="mini-swatches">
+          {availableColors.map((variant) => (
+            <i key={`${variant.color}-${variant.colorHex}`} style={{ backgroundColor: variant.colorHex }} title={variant.color} />
+          ))}
+        </div>
+      </div>
       <div className="product-card__footer">
         <div>
           <strong>{formatCurrency(product.price)}</strong>
@@ -517,6 +564,14 @@ const ProductModal = ({ product, onClose }: { product: Product; onClose: () => v
           <div className="price-line">
             <strong>{formatCurrency(product.price)}</strong>
             {product.compareAtPrice ? <span>{formatCurrency(product.compareAtPrice)}</span> : null}
+          </div>
+
+          <div className="material-panel">
+            <img src={verticeImages.texturaAlgodon} alt="Detalle textil premium" loading="lazy" decoding="async" />
+            <div>
+              <span>Materiales</span>
+              <strong>Terminación premium, tacto pesado y costuras reforzadas.</strong>
+            </div>
           </div>
 
           <div className="selector-group">
@@ -845,6 +900,11 @@ const DropSection = ({ products, onOpen }: { products: Product[]; onOpen: (produ
       <span className="section-kicker">Drop limitado</span>
       <h2>Piezas de baja tirada para generar urgencia real.</h2>
       <p>La sección editorial destaca productos con poco stock y permite vender lanzamientos desde Instagram sin perder control del inventario.</p>
+      <div className="drop-stats" aria-label="Datos del drop">
+        <span><strong>72 hs</strong> ventana comercial</span>
+        <span><strong>15</strong> unidades promedio</span>
+        <span><strong>100%</strong> consulta asistida</span>
+      </div>
       <a className="btn btn--dark" href="#catalogo">
         Ver drop <ArrowRight size={18} />
       </a>
@@ -899,6 +959,10 @@ const ShowroomSection = () => (
       <span className="section-kicker">Showroom</span>
       <h2>Palermo, CABA</h2>
       <p>Dirección ficticia: Costa Rica 4820, Palermo. Atención con cita previa de martes a sábado, 12 a 19 hs.</p>
+      <div className="showroom-meta">
+        <span>Retiro en showroom</span>
+        <strong>Mar a sáb / 12 a 19 hs</strong>
+      </div>
       <div className="showroom-actions">
         <a className="btn btn--primary" href={buildWhatsAppUrl(`Hola Lucas, quiero coordinar retiro en showroom para ${BRAND_NAME}.`)}>
           <MessageCircle size={18} /> Coordinar visita

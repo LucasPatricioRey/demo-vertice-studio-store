@@ -9,10 +9,11 @@ Demo creada por Lucas Rey.
 ## Stack
 
 - Monorepo con `/frontend` y `/backend`
-- Frontend: Vite, React, TypeScript, React Router, lucide-react, CSS custom responsive
+- Frontend: Vite, React, TypeScript, React Router, lucide-react, CSS custom responsive con capa visual premium CSS 3D
 - Backend: Node.js, Express, TypeScript, MongoDB Atlas, Mongoose, JWT, bcrypt, dotenv, cors, morgan, zod
 - Cierre de compra: WhatsApp, sin Mercado Pago
-- Imágenes actuales: placeholders premium controlados con `vs-gradient://`
+- Imágenes actuales: assets finales locales en `frontend/public/images/vertice/`
+- Deploy SPA: `frontend/vercel.json` incluye rewrite a `/` para rutas como `/admin/login`
 
 ## Estructura
 
@@ -30,6 +31,8 @@ Demo creada por Lucas Rey.
 │   │   └── server.ts
 │   └── .env.example
 ├── frontend
+│   ├── public/images/vertice
+│   ├── vercel.json
 │   └── src
 │       ├── components
 │       ├── data
@@ -109,6 +112,7 @@ Resultado esperado:
 ## Funcionalidades públicas
 
 - Hero editorial de marca streetwear premium
+- Capa visual premium con CSS 3D, cards con profundidad, glass sutil y microinteracciones
 - Catálogo consumido desde API cuando MongoDB está configurado
 - Fallback visual local si el backend no tiene DB, para poder mostrar la demo sin romper UX
 - Filtros por categoría, talle, color, precio y estado comercial
@@ -145,8 +149,15 @@ Resultado esperado:
 - Instagram ficticio
 - Testimonios ficticios
 - Ventas/pedidos demo del seed
-- Imágenes finales reemplazadas por placeholders premium
 - Pago final coordinado por WhatsApp
+
+## Sistema visual 3D
+
+- `styles.css` concentra la dirección visual: `scene-3d`, `tilt-card`, sombras por capas, paneles glass y microinteracciones.
+- El tilt/parallax se aplica sólo en punteros finos y respeta `prefers-reduced-motion`.
+- Las animaciones usan `transform` y `opacity` para mantener buena performance.
+- Las imágenes viven en `frontend/public/images/vertice/` y se referencian desde `frontend/src/assets.ts`.
+- `frontend/vercel.json` evita 404 al entrar directo a rutas internas de React Router.
 
 ## Cómo adaptar a un cliente real
 
