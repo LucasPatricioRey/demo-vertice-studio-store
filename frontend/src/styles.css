@@ -3016,6 +3016,95 @@ tbody tr:hover {
   box-shadow: 0 32px 76px rgba(180, 107, 67, 0.18), 0 26px 70px rgba(0, 0, 0, 0.44);
 }
 
+/* Real Three.js hero scene */
+.hero {
+  min-height: calc(100svh - 72px);
+}
+
+.hero::after {
+  z-index: 2;
+}
+
+.hero-three-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-three-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(7, 8, 7, 0.92) 0%, rgba(7, 8, 7, 0.62) 34%, rgba(7, 8, 7, 0.08) 66%, rgba(7, 8, 7, 0.58) 100%),
+    radial-gradient(circle at 72% 24%, rgba(246, 177, 132, 0.14), transparent 32%);
+  pointer-events: none;
+}
+
+.hero-three-scene canvas {
+  position: relative;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-three-scene--fallback {
+  background:
+    radial-gradient(circle at 72% 28%, rgba(180, 107, 67, 0.24), transparent 34%),
+    radial-gradient(circle at 58% 68%, rgba(102, 115, 92, 0.18), transparent 34%);
+}
+
+.hero__content {
+  max-width: 690px;
+  z-index: 5;
+}
+
+.hero__visual--three {
+  z-index: 4;
+  display: flex;
+  align-items: end;
+  justify-content: flex-end;
+  min-height: 600px;
+  pointer-events: none;
+}
+
+.hero-three-panel {
+  display: grid;
+  gap: 8px;
+  width: min(300px, 100%);
+  margin: 0 0 8vh auto;
+  padding: 16px 18px;
+  border: 1px solid rgba(255, 250, 241, 0.2);
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 241, 0.15), rgba(255, 250, 241, 0.04)),
+    rgba(8, 9, 8, 0.58);
+  color: var(--paper-strong);
+  box-shadow:
+    0 34px 90px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  animation: heroPanelIn 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 420ms both;
+}
+
+.hero-three-panel span {
+  color: #f6b184;
+  font-size: 0.78rem;
+  font-weight: 950;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero-three-panel strong {
+  max-width: 22ch;
+  font-size: 1.2rem;
+  line-height: 1.12;
+}
+
 @keyframes shimmer {
   to {
     background-position: -220% 0;
@@ -3108,6 +3197,17 @@ tbody tr:hover {
   }
   50% {
     transform: scale(1.045);
+  }
+}
+
+@keyframes heroPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(22px) rotateX(12deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
   }
 }
 
@@ -3507,6 +3607,34 @@ tbody tr:hover {
 
   .hero-pulse-card strong {
     text-align: left;
+  }
+}
+
+@media (max-width: 1120px) {
+  .hero-three-scene::before {
+    background:
+      linear-gradient(180deg, rgba(7, 8, 7, 0.78) 0%, rgba(7, 8, 7, 0.36) 36%, rgba(7, 8, 7, 0.68) 100%),
+      radial-gradient(circle at 50% 20%, rgba(246, 177, 132, 0.16), transparent 36%);
+  }
+
+  .hero__visual--three {
+    min-height: 460px;
+  }
+
+  .hero-three-panel {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 780px) {
+  .hero__visual--three {
+    display: none;
+  }
+
+  .hero-three-scene::before {
+    background:
+      linear-gradient(180deg, rgba(7, 8, 7, 0.48) 0%, rgba(7, 8, 7, 0.22) 36%, rgba(7, 8, 7, 0.9) 100%),
+      radial-gradient(circle at 50% 18%, rgba(246, 177, 132, 0.14), transparent 36%);
   }
 }
 

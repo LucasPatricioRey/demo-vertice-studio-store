@@ -21,7 +21,7 @@ import {
   Truck,
   X
 } from "lucide-react";
-import { useEffect, useMemo, useState, type MouseEvent, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState, type MouseEvent, type ReactNode } from "react";
 import { API_URL, publicApi } from "../api";
 import { ProductVisual } from "../components/ProductVisual";
 import { verticeImages } from "../assets";
@@ -39,6 +39,8 @@ import {
 
 type SortKey = "nuevos" | "menor-precio" | "mayor-precio" | "destacados";
 type ProductFlag = "todos" | "destacados" | "nuevos" | "drop";
+
+const HeroThreeScene = lazy(() => import("../components/HeroThreeScene").then((module) => ({ default: module.HeroThreeScene })));
 
 const navItems = [
   ["Inicio", "#inicio"],
@@ -171,12 +173,17 @@ export const PublicStore = () => {
   }, [category, color, flag, priceMax, products, search, size, sort]);
 
   const dropProducts = products.filter((product) => product.isDrop && product.isActive).slice(0, 4);
-  const heroVisual = {
-    name: "Editorial nocturna Vértice Studio",
-    category: "Vértice Studio",
-    imageUrl: verticeImages.hero,
-    isDrop: true
-  };
+  const heroSceneImages = useMemo(
+    () => ({
+      hero: verticeImages.hero,
+      hoodie: verticeImages.hoodieCore,
+      outfit: verticeImages.outfitCompleto,
+      accessories: verticeImages.accesorios,
+      drop: verticeImages.dropLimitado,
+      whatsapp: verticeImages.whatsappFlow
+    }),
+    []
+  );
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
 
   return (
@@ -192,6 +199,9 @@ export const PublicStore = () => {
 
       <main>
         <section className="hero" id="inicio">
+          <Suspense fallback={<div className="hero-three-scene hero-three-scene--fallback" aria-hidden="true" />}>
+            <HeroThreeScene images={heroSceneImages} />
+          </Suspense>
           <div className="hero__content">
             <div className="eyebrow"><Sparkles size={16} /> Nuevo drop / stock real</div>
             <h1>Streetwear premium para marcas que venden por WhatsApp.</h1>
@@ -214,33 +224,10 @@ export const PublicStore = () => {
             </div>
           </div>
 
-          <div className="hero__visual scene-3d hero-impact" aria-hidden="true" onMouseMove={handleTiltMove} onMouseLeave={resetTilt}>
-            <div className="hero-stage">
-              <div className="hero-stage__halo" />
-              <div className="hero-stage__grid" />
-              <ProductVisual product={heroVisual} priority="hero" className="hero-main-image" />
-              <img className="hero-float hero-float--look" src={verticeImages.outfitCompleto} alt="" loading="eager" decoding="async" />
-              <img className="hero-float hero-float--product" src={verticeImages.hoodieCore} alt="" loading="eager" decoding="async" />
-              <img className="hero-float hero-float--accessory" src={verticeImages.accesorios} alt="" loading="eager" decoding="async" />
-              <div className="hero-orbit" />
-              <div className="hero-depth-line hero-depth-line--one" />
-              <div className="hero-depth-line hero-depth-line--two" />
-              <div className="hero-card hero-card--top">
-                <span>Drop activo</span>
-                <strong>{dropProducts.length || 4} piezas</strong>
-              </div>
-              <div className="hero-card hero-card--bottom">
-                <span>Venta asistida</span>
-                <strong>WhatsApp + admin</strong>
-              </div>
-              <div className="hero-card hero-card--side">
-                <span>Stock real</span>
-                <strong>Talle + color</strong>
-              </div>
-              <div className="hero-pulse-card">
-                <span>Pedido guardado</span>
-                <strong>antes de abrir WhatsApp</strong>
-              </div>
+          <div className="hero__visual hero__visual--three" aria-hidden="true">
+            <div className="hero-three-panel">
+              <span>Escena 3D interactiva</span>
+              <strong>Drop, stock y WhatsApp orbitando en vivo.</strong>
             </div>
           </div>
         </section>

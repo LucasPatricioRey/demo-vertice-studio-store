@@ -9,7 +9,7 @@ Demo creada por Lucas Rey.
 ## Stack
 
 - Monorepo con `/frontend` y `/backend`
-- Frontend: Vite, React, TypeScript, React Router, lucide-react, CSS custom responsive con capa visual premium CSS 3D
+- Frontend: Vite, React, TypeScript, React Router, lucide-react, Three.js lazy-loaded y CSS custom responsive con capa visual premium
 - Backend: Node.js, Express, TypeScript, MongoDB Atlas, Mongoose, JWT, bcrypt, dotenv, cors, morgan, zod
 - Cierre de compra: WhatsApp, sin Mercado Pago
 - Imágenes actuales: assets finales locales en `frontend/public/images/vertice/`
@@ -154,6 +154,7 @@ Resultado esperado:
 ## Sistema visual 3D
 
 - `styles.css` concentra la dirección visual: `scene-3d`, `tilt-card`, sombras por capas, paneles glass y microinteracciones.
+- El hero carga una escena Three.js real en `HeroThreeScene`, separada en chunk lazy para no inflar el bundle principal.
 - El tilt/parallax se aplica sólo en punteros finos y respeta `prefers-reduced-motion`.
 - Las animaciones usan `transform` y `opacity` para mantener buena performance.
 - Las imágenes viven en `frontend/public/images/vertice/` y se referencian desde `frontend/src/assets.ts`.
